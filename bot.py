@@ -77,10 +77,10 @@ async def on_message(message):
         image = image.resize((image.width * 1, image.height * 1))
         # image.show()
 
-        custom_config = r'--oem 3 --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789[]'
+        custom_config = r'--oem 3 --psm 6'
 
         ocr_data = pytesseract.image_to_data(
-            image, config=custom_config, lang='spa',
+            image, config=custom_config, lang='eng+spa+tur+ind',
             output_type=pytesseract.Output.DATAFRAME)
 
         # Clean up the data
