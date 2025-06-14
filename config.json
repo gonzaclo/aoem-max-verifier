@@ -1,0 +1,9 @@
+{
+    "role_map": {
+        "OTHER": "Other Server",
+        "BOB": "BOB ALLIANCE",
+        "SST": "SST ALLIANCE"
+    },
+    "nickname_prefix": "",
+    "target_channel_id": 1382219694689226922
+}
