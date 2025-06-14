@@ -1,2 +1,4 @@
 .env
 config.json  # optional, if you want to keep it private too
+*.png
+test.py

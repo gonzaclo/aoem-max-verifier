@@ -9,6 +9,7 @@ import pytesseract
 from PIL import Image, ImageEnhance, ImageOps
 import requests
 import asyncio
+from only_letters import only_letters
 load_dotenv()
 
 intents = discord.Intents.default()
@@ -71,9 +72,12 @@ async def on_message(message):
         )
         image = image.crop(rect_crop)
 
+        # Turn into red letters and white background
+        image = only_letters(image_in=image, threshold=160)
+
         # Change contrast
-        image = ImageEnhance.Contrast(image).enhance(2.0)
-        image = ImageEnhance.Sharpness(image).enhance(2.0)
+        # image = ImageEnhance.Contrast(image).enhance(2.0)
+        # image = ImageEnhance.Sharpness(image).enhance(2.0)
         image = image.resize((image.width * 5, image.height * 5))
         # image.show()
 
