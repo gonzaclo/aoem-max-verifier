@@ -8,6 +8,7 @@ import io
 import pytesseract
 from PIL import Image, ImageEnhance, ImageOps
 import requests
+import asyncio
 load_dotenv()
 
 intents = discord.Intents.default()
@@ -79,7 +80,7 @@ async def on_message(message):
         custom_config = r'--oem 3 --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789[]'
 
         ocr_data = pytesseract.image_to_data(
-            image, config=custom_config,
+            image, config=custom_config, lang='spa',
             output_type=pytesseract.Output.DATAFRAME)
 
         # Clean up the data
@@ -147,7 +148,8 @@ async def on_message(message):
         # Delete picture
         try:
             print('done')
-            #await message.delete()
+            await asyncio.sleep(60)
+            await message.delete()
         except discord.Forbidden:
             print("❌ Bot lacks permission to delete messages.")
         except discord.HTTPException as e:
