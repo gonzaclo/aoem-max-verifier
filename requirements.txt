@@ -3,3 +3,4 @@ pytesseract
 Pillow
 pandas
 python-dotenv
+requests
