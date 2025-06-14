@@ -134,7 +134,8 @@ async def on_message(message):
                 f"❌ No role mapping found for alliance tag: [{alliance_tag}].")
         # Delete picture
         try:
-            await message.delete()
+            print('done')
+            #await message.delete()
         except discord.Forbidden:
             print("❌ Bot lacks permission to delete messages.")
         except discord.HTTPException as e:
