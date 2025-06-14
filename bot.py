@@ -7,7 +7,6 @@ from commands_dc import remove_role_map,set_channel,show_mapping,add_role_map,ge
 import io
 import pytesseract
 from PIL import Image, ImageEnhance, ImageOps
-from deep_translator import GoogleTranslator
 import requests
 load_dotenv()
 
@@ -54,6 +53,9 @@ async def on_message(message):
             await message.channel.send(
                 "Please upload a .jpg, .jpeg, or .png file.")
             return
+        
+        # React thinking to the message
+        await message.add_reaction('⏳')
 
         # Download image
         image_bytes = await attachment.read()
@@ -69,14 +71,15 @@ async def on_message(message):
         image = image.crop(rect_crop)
 
         # Change contrast
-        # image = ImageEnhance.Contrast(image).enhance(1.9)
-        # image = ImageEnhance.Sharpness(image).enhance(5.0)
-        # image = ImageEnhance.Brightness(image).enhance(0.9)
-        image = image.resize((image.width * 3, image.height * 3))
-        image.show()
+        image = ImageEnhance.Contrast(image).enhance(2.0)
+        image = ImageEnhance.Sharpness(image).enhance(1.5)
+        image = image.resize((image.width * 1, image.height * 1))
+        # image.show()
+
+        custom_config = r'--oem 3 --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789[]'
 
         ocr_data = pytesseract.image_to_data(
-            image, config='--psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890[]',
+            image, config=custom_config,
             output_type=pytesseract.Output.DATAFRAME)
 
         # Clean up the data
@@ -105,6 +108,7 @@ async def on_message(message):
 
         else:
             print("'Alliance' not found in OCR output. Try another screenshot.")
+            await message.add_reaction('❌')
             await message.channel.send("❌ Alliance not found in OCR output. Try another screenshot.")
             return
 
@@ -122,14 +126,22 @@ async def on_message(message):
             if role:
                 try:
                     await message.author.add_roles(role)
+                    await message.clear_reactions()
+                    await message.add_reaction('✅')
                     await message.channel.send(f"✅ Role '{role_name}' assigned to {message.author.mention}.")
                 except discord.Forbidden:
+                    await message.clear_reactions()
+                    await message.add_reaction('❌')
                     await message.channel.send(
                         "❌ Missing permission to assign roles.")
             else:
+                await message.clear_reactions()
+                await message.add_reaction('❌')
                 await message.channel.send(
                     f"❌ Role '{role_name}' not found on server.")
         else:
+            await message.clear_reactions()
+            await message.add_reaction('❌')
             await message.channel.send(
                 f"❌ No role mapping found for alliance tag: [{alliance_tag}].")
         # Delete picture
