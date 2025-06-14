@@ -73,8 +73,8 @@ async def on_message(message):
 
         # Change contrast
         image = ImageEnhance.Contrast(image).enhance(2.0)
-        image = ImageEnhance.Sharpness(image).enhance(1.5)
-        image = image.resize((image.width * 1, image.height * 1))
+        image = ImageEnhance.Sharpness(image).enhance(2.0)
+        image = image.resize((image.width * 5, image.height * 5))
         # image.show()
 
         custom_config = r'--oem 3 --psm 6'
