@@ -152,8 +152,8 @@ async def on_message(message):
         # Delete picture
         try:
             print('done')
-            await asyncio.sleep(60)
-            await message.delete()
+            #await asyncio.sleep(60)
+            #await message.delete()
         except discord.Forbidden:
             print("❌ Bot lacks permission to delete messages.")
         except discord.HTTPException as e:
