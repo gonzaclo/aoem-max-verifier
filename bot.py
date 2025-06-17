@@ -132,8 +132,12 @@ async def on_message(message):
                 try:
                     await message.author.add_roles(role)
                     await message.clear_reactions()
-                    await message.add_reaction('✅')
-                    await message.channel.send(f"✅ Role '{role_name}' assigned to {message.author.mention}.")
+                    if role_name != 'Other Server'
+                        await message.add_reaction('✅')
+                        await message.channel.send(f"✅ Role '{role_name}' assigned to {message.author.mention}.")
+                    else:
+                        await message.add_reaction('❓')
+                        await message.channel.send(f"❓ The '{role_name}' role was assigned to {message.author.mention}. If you think it is wrong, try sending a complete screenshot of your profile. You don't have to crop it.")
                 except discord.Forbidden:
                     await message.clear_reactions()
                     await message.add_reaction('❌')
