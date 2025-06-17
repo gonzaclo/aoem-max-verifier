@@ -132,7 +132,7 @@ async def on_message(message):
                 try:
                     await message.author.add_roles(role)
                     await message.clear_reactions()
-                    if role_name != 'Other Server'
+                    if role_name != 'Other Server':
                         await message.add_reaction('✅')
                         await message.channel.send(f"✅ Role '{role_name}' assigned to {message.author.mention}.")
                     else:
