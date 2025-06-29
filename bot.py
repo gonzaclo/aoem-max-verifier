@@ -73,7 +73,7 @@ async def on_message(message):
         image = image.crop(rect_crop)
 
         # Turn into red letters and white background
-        image = only_letters(image_in=image, threshold=160)
+        image = only_letters(image_in=image, threshold=165)
 
         # Change contrast
         # image = ImageEnhance.Contrast(image).enhance(2.0)
