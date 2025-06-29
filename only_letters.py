@@ -1,6 +1,6 @@
 from PIL import Image
 
-def only_letters(image_in, highlight_color=(255, 0, 0), threshold=20):
+def only_letters(image_in, highlight_color=(0, 0, 0), threshold=20):
     image = image_in.convert("RGB")
     pixels = image.load()
 
