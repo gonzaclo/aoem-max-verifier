@@ -63,11 +63,17 @@ async def on_message(message):
         image_bytes = await attachment.read()
         image = Image.open(io.BytesIO(image_bytes)).convert(
             "L")  # Convert to grayscale
+        
+        # Set as negative
         image = ImageOps.invert(image)
+
+        # Resixe image
+        image = image.resize((image.width * 5, image.height * 5))
+
         # Crop the image
         wd, hg = image.size
         rect_crop = (
-            int(wd * 0.65), int(hg * 0.15),
+            int(wd * 0.66), int(hg * 0.15),
             int(wd * 0.85), int(hg * 0.30)
         )
         image = image.crop(rect_crop)
@@ -76,10 +82,9 @@ async def on_message(message):
         # Change contrast
         # image = ImageEnhance.Contrast(image).enhance(2.0)
         # image = ImageEnhance.Sharpness(image).enhance(2.0)
-        image = image.resize((image.width * 5, image.height * 5))
 
         # Turn into black letters and white background
-        image = only_letters(image_in=image, threshold=150)
+        image = only_letters(image_in=image, highlight_color=(33,33,33), background=(255,255,255), threshold=100, inc=60)
         # image.show()
 
         custom_config = r'--oem 3 --psm 6'

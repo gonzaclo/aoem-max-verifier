@@ -1,27 +1,38 @@
 from PIL import Image, ImageEnhance, ImageOps
 import pytesseract
+import os
 from only_letters import only_letters
 
-# Download image
+i = 0
+# Load files from a folder
+for file in os.listdir('images'):
+    image = Image.open('images/'+file).convert(
+        "L")  # Convert to grayscale
+    image = ImageOps.invert(image)
 
-image = Image.open('images/Screenshot_20250629_171840_Age_of_Empires_Mobile.jpeg').convert(
-    "L")  # Convert to grayscale
-image = ImageOps.invert(image)
-# Crop the image
-wd, hg = image.size
-rect_crop = (
-    int(wd * 0.65), int(hg * 0.15),
-    int(wd * 0.85), int(hg * 0.30)
-)
-image = image.crop(rect_crop)
+    # Change size
+    image = image.resize((image.width * 5, image.height * 5))
 
-# Change contrast
-# image = ImageEnhance.Contrast(image).enhance(2.0)
-# image = ImageEnhance.Sharpness(image).enhance(2.0)
-image = image.resize((image.width * 3, image.height * 3))
-image = only_letters(image_in=image, threshold=150)
-image.show()
+    # Crop the image
+    wd, hg = image.size
+    rect_crop = (
+        int(wd * 0.66), int(hg * 0.15),
+        int(wd * 0.85), int(hg * 0.30)
+    )
+    image = image.crop(rect_crop)
 
-string = pytesseract.image_to_string(image=image)
+    # Change contrast
+    # image = ImageEnhance.Contrast(image).enhance(2.0)
+    # image = ImageEnhance.Sharpness(image).enhance(2.0)
 
-print(string)
+
+    image = only_letters(image_in=image, highlight_color=(33,33,33), background=(255,255,255), threshold=100, inc=60)
+    image.show()
+
+    custom_config = r'--oem 3 --psm 6'
+    string = pytesseract.image_to_string(image=image, config=custom_config, lang='eng+spa+tur+ind')
+
+    i = i+1
+
+    print(f'------------ {i} --- {file} -----------')
+    print(string)
