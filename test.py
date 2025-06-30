@@ -4,7 +4,7 @@ from only_letters import only_letters
 
 # Download image
 
-image = Image.open('Google Chrome 2025-06-14 13.33.38.png').convert(
+image = Image.open('images/Screenshot_20250629_171840_Age_of_Empires_Mobile.jpeg').convert(
     "L")  # Convert to grayscale
 image = ImageOps.invert(image)
 # Crop the image
@@ -15,12 +15,11 @@ rect_crop = (
 )
 image = image.crop(rect_crop)
 
-image = only_letters(image_in=image, threshold=160)
-
 # Change contrast
 # image = ImageEnhance.Contrast(image).enhance(2.0)
 # image = ImageEnhance.Sharpness(image).enhance(2.0)
-image = image.resize((image.width * 5, image.height * 5))
+image = image.resize((image.width * 3, image.height * 3))
+image = only_letters(image_in=image, threshold=150)
 image.show()
 
 string = pytesseract.image_to_string(image=image)

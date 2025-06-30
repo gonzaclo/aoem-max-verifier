@@ -72,13 +72,14 @@ async def on_message(message):
         )
         image = image.crop(rect_crop)
 
-        # Turn into red letters and white background
-        image = only_letters(image_in=image, threshold=165)
 
         # Change contrast
         # image = ImageEnhance.Contrast(image).enhance(2.0)
         # image = ImageEnhance.Sharpness(image).enhance(2.0)
         image = image.resize((image.width * 5, image.height * 5))
+
+        # Turn into black letters and white background
+        image = only_letters(image_in=image, threshold=165)
         # image.show()
 
         custom_config = r'--oem 3 --psm 6'
