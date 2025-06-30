@@ -79,7 +79,7 @@ async def on_message(message):
         image = image.resize((image.width * 5, image.height * 5))
 
         # Turn into black letters and white background
-        image = only_letters(image_in=image, threshold=165)
+        image = only_letters(image_in=image, threshold=150)
         # image.show()
 
         custom_config = r'--oem 3 --psm 6'
