@@ -84,7 +84,7 @@ async def on_message(message):
         # image = ImageEnhance.Sharpness(image).enhance(2.0)
 
         # Turn into black letters and white background
-        image = only_letters(image_in=image, highlight_color=(33,33,33), background=(255,255,255), threshold=100, inc=60)
+        image = only_letters(image_in=image, highlight_color=(255,255,255), background=(0,0,0), threshold=100, inc=60)
         # image.show()
 
         custom_config = r'--oem 3 --psm 6'
