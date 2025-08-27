@@ -93,6 +93,28 @@ async def add_role_map(interaction: discord.Interaction, tag: str,
         await interaction.response.send_message(f"❌ Error: {e}",
                                                 ephemeral=True)
         
+async def set_default_role(interaction: discord.Interaction,
+                           role_name: discord.Role,
+                           firebase_url: str,
+                           server_id: str):
+    try:
+        # Load current config
+        res = requests.get(f'{firebase_url}config/{server_id}.json')
+        config = res.json()
+
+        # Add or update the role_map
+        config.setdefault("default_role", {})["def"] = role_name
+
+        # Save the updated config
+        res = requests.patch(f'{firebase_url}config/{server_id}.json', json=config)
+
+        await interaction.response.send_message(
+            f"✅ Added default role → `{role_name}`",
+            ephemeral=True)
+    except Exception as e:
+        await interaction.response.send_message(f"❌ Error: {e}",
+                                                ephemeral=True)
+        
 async def get_config(interaction: discord.Interaction, server_id: str, firebase_url: str):
     config = requests.get(f'{firebase_url}config/{server_id}.json')
     print(config.json())

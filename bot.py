@@ -3,7 +3,7 @@ from discord.ext import commands
 import json
 import os
 from dotenv import load_dotenv
-from commands_dc import remove_role_map,set_channel,show_mapping,add_role_map,get_config
+from commands_dc import remove_role_map,set_channel,show_mapping,add_role_map,get_config,set_default_role
 import io
 import pytesseract
 from PIL import Image, ImageEnhance, ImageOps
@@ -175,6 +175,11 @@ async def wrapped_add_role_map(interaction: discord.Interaction, tag: str,
                        role_name: str):
     await add_role_map(interaction,tag,role_name, FIREBASE_URL, interaction.guild.id)
 
+@bot.tree.command(name="set_default_role",
+                  description="Set the default role for assigning to everyone")
+async def wrapped_set_default_role(interaction: discord.Interaction,
+                                   role_name: discord.Role):
+    await set_default_role(interaction,role_name, FIREBASE_URL, interaction.guild.id)
 
 @bot.tree.command(name="remove_role_map",
                   description="Remove a role mapping to config.json")
