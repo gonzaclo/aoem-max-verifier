@@ -124,11 +124,15 @@ async def on_message(message):
             await message.add_reaction('❌')
             await message.channel.send("❌ Alliance not found in OCR output. Try another screenshot.")
             return
+        
+        other_tag = None
 
         try:
             alliance_tag = config["role_map"][text_below]
         except KeyError:
             alliance_tag = config["role_map"]["OTHER"]
+            other_tag = 'OTHER'
+
 
         print(alliance_tag)
 
@@ -140,7 +144,7 @@ async def on_message(message):
                 try:
                     await message.author.add_roles(role)
                     await message.clear_reactions()
-                    if role_name != 'Other Server':
+                    if other_tag != 'OTHER':
                         if config["set_default"] == 'yes':
                             role_default = discord.utils.get(message.guild.roles, name=config["default_role"])
                             await message.author.add_roles(role_default)
