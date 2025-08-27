@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
+from typing import Optional
 import json
 import os
 from dotenv import load_dotenv
@@ -139,6 +141,9 @@ async def on_message(message):
                     await message.author.add_roles(role)
                     await message.clear_reactions()
                     if role_name != 'Other Server':
+                        if config["set_default"] == 'yes':
+                            role_default = discord.utils.get(message.guild.roles, name=config["default_role"])
+                            await message.author.add_roles(role_default)
                         await message.add_reaction('✅')
                         await message.channel.send(f"✅ Role '{role_name}' assigned to {message.author.mention}.")
                     else:
@@ -172,14 +177,23 @@ async def on_message(message):
 @bot.tree.command(name="add_role_map",
                   description="Add a new role mapping to config.json")
 async def wrapped_add_role_map(interaction: discord.Interaction, tag: str,
-                       role_name: str):
+                       role_name: discord.Role):
     await add_role_map(interaction,tag,role_name, FIREBASE_URL, interaction.guild.id)
 
 @bot.tree.command(name="set_default_role",
                   description="Set the default role for assigning to everyone")
+@app_commands.describe(set_default="Do you want to set a default role for everyone?")
+@app_commands.choices(set_default=[
+    app_commands.Choice(name='Yes', value='yes'),
+    app_commands.Choice(name='No', value='no')
+])
 async def wrapped_set_default_role(interaction: discord.Interaction,
-                                   role_name: discord.Role):
-    await set_default_role(interaction,role_name, FIREBASE_URL, interaction.guild.id)
+                                   set_default: app_commands.Choice[str],
+                                   role_name: discord.Role = None):
+    if role_name is not None:
+        await set_default_role(interaction, set_default.value, FIREBASE_URL, interaction.guild.id, role_name.name)
+    else:
+        await set_default_role(interaction, set_default.value, FIREBASE_URL, interaction.guild.id, '-')
 
 @bot.tree.command(name="remove_role_map",
                   description="Remove a role mapping to config.json")
@@ -201,4 +215,4 @@ async def wrapped_get_config(interaction: discord.Interaction):
     await get_config(interaction, str(interaction.guild.id), FIREBASE_URL)
 
 bot.run(TOKEN)
-### Created by GONZA ###
+### Created by [s153] GONZA ###

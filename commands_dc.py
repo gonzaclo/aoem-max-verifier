@@ -72,7 +72,7 @@ async def remove_role_map(interaction: discord.Interaction, tag: str, firebase_u
                                                 ephemeral=True)
         
 async def add_role_map(interaction: discord.Interaction, tag: str,
-                       role_name: str,
+                       role_name: discord.Role,
                        firebase_url: str,
                        server_id: str):
     try:
@@ -81,7 +81,7 @@ async def add_role_map(interaction: discord.Interaction, tag: str,
         config = res.json()
 
         # Add or update the role_map
-        config.setdefault("role_map", {})[tag.upper()] = role_name
+        config.setdefault("role_map", {})[tag.upper()] = str(role_name)
 
         # Save the updated config
         res = requests.patch(f'{firebase_url}config/{server_id}.json', json=config)
@@ -94,23 +94,38 @@ async def add_role_map(interaction: discord.Interaction, tag: str,
                                                 ephemeral=True)
         
 async def set_default_role(interaction: discord.Interaction,
-                           role_name: discord.Role,
+                           set_default: str,
                            firebase_url: str,
-                           server_id: str):
+                           server_id: str,
+                           role_name: str = ''):
     try:
         # Load current config
         res = requests.get(f'{firebase_url}config/{server_id}.json')
-        config = res.json()
+        config = res.json() 
 
-        # Add or update the role_map
-        config.setdefault("default_role", {})["def"] = role_name
+        # Add or update the default_role
+        if set_default == "yes" and role_name != '-':
+            config["default_role"] = str(role_name)
+            config["set_default"] = str(set_default)
+        else:
+            config["default_role"] = ''
+            config["set_default"] = 'no'
 
         # Save the updated config
         res = requests.patch(f'{firebase_url}config/{server_id}.json', json=config)
 
-        await interaction.response.send_message(
-            f"✅ Added default role → `{role_name}`",
-            ephemeral=True)
+        if set_default == "yes" and role_name != '-':
+            await interaction.response.send_message(
+                f"✅ Added default role → `{role_name}`",
+                ephemeral=True)
+        elif set_default == "yes" and role_name == '-':
+            await interaction.response.send_message(
+                f"✅ When you use default_role = 'Yes', you must select one Role. The parameter set_default was set as 'No' automatically",
+                ephemeral=True)
+        else:
+            await interaction.response.send_message(
+                f"✅ You are not using a default role",
+                ephemeral=True)
     except Exception as e:
         await interaction.response.send_message(f"❌ Error: {e}",
                                                 ephemeral=True)
