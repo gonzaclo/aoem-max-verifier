@@ -81,13 +81,13 @@ async def add_role_map(interaction: discord.Interaction, tag: str,
         config = res.json()
 
         # Add or update the role_map
-        config.setdefault("role_map", {})[tag.upper()] = str(role_name)
+        config.setdefault("role_map", {})[tag] = str(role_name)
 
         # Save the updated config
         res = requests.patch(f'{firebase_url}config/{server_id}.json', json=config)
 
         await interaction.response.send_message(
-            f"✅ Added mapping: `{tag.upper()}` → `{role_name}`",
+            f"✅ Added mapping: `{tag}` → `{role_name}`",
             ephemeral=True)
     except Exception as e:
         await interaction.response.send_message(f"❌ Error: {e}",
