@@ -70,7 +70,7 @@ async def on_message(message):
         image = ImageOps.invert(image)
 
         # Resixe image
-        image = image.resize((image.width * 5, image.height * 5))
+        image = image.resize((image.width * 2, image.height * 2))
 
         # Crop the image
         wd, hg = image.size
