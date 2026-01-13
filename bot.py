@@ -89,7 +89,7 @@ async def on_message(message):
         image = only_letters(image_in=image, highlight_color=(255,255,255), background=(0,0,0), threshold=100, inc=60)
         # image.show()
 
-        custom_config = r'--oem 3 --psm 6'
+        custom_config = r"--oem 3 --psm 6 -c preserve_interword_spaces=1 --dpi 300"
 
         ocr_data = pytesseract.image_to_data(
             image, config=custom_config, lang='eng+spa+tur+ind',
